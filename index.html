@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Download</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .download-btn {
+      display: inline-block;
+      padding: 15px 25px;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #0070f3;
+      text-decoration: none;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .download-btn:hover {
+      background-color: #005bb5;
+    }
+
+    /* Toast 样式 */
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      padding: 10px;
+      position: fixed;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="app_icon.png" alt="App Icon" width="100">
+    <h1>LumeXS</h1>
+    <a class="download-btn" id="download-btn" href="#">Download for Android</a>
+  </div>
+
+  <!-- Toast 弹窗 -->
+  <div id="toast" class="toast">Not currently supported on iOS</div>
+
+  <script>
+    // 检测设备类型
+    function detectDevice() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      // 判断是否为 iOS 设备
+      if (/iPhone|iPad|iPod/i.test(userAgent)) {
+        return "ios";
+      }
+      // 判断是否为 Android 设备
+      if (/android/i.test(userAgent)) {
+        return "android";
+      }
+      return "unknown";
+    }
+
+    // 显示 Toast 提示
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+
+      // 自动隐藏
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // 绑定点击事件
+    document.getElementById('download-btn').addEventListener('click', (event) => {
+      event.preventDefault(); // 阻止默认行为
+
+      const device = detectDevice();
+
+      if (device === "ios") {
+        // 如果是 iOS，显示 Toast 提示
+        showToast("Not currently supported on iOS");
+      } else if (device === "android") {
+        // 如果是 Android，跳转到下载链接
+        window.location.href = "https://your-apk-link.com/app.apk"; // 替换为实际 APK 链接
+      } else {
+        // 如果是未知设备，显示提示
+        showToast("This device is not currently supported");
+      }
+    });
+  </script>
+</body>
+</html>
