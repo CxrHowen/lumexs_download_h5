@@ -7,6 +7,10 @@
       {
         "src": "/(.*\\.png)",
         "dest": "/$1"
+      },
+      {
+        "src": "/lumexs/download/(.*\\.png)",
+        "dest": "/$1"
       }
     ]
   }
