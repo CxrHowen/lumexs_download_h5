@@ -3,6 +3,10 @@
       {
         "src": "/lumexs/download",
         "dest": "/index.html"
+      },
+      {
+        "src": "/(.*\\.png)",
+        "dest": "/$1"
       }
     ]
   }
