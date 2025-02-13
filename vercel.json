@@ -1,11 +1,11 @@
 {
     "routes": [
       {
-        "src": "/lumexs",
+        "src": "/lume",
         "dest": "/index.html"
       },
       {
-        "src": "/lumexs/(.*\\.png)",
+        "src": "/lume/(.*\\.png)",
         "dest": "/$1"
       }
     ]
