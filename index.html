@@ -70,7 +70,68 @@
   <!-- Toast 弹窗 -->
   <div id="toast" class="toast">Not currently supported on iOS</div>
 
+  <!-- 微信浏览器引导遮罩层 -->
+  <div id="wechat-guide" style="display:none;position:fixed;z-index:2000;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);color:#fff;text-align:center;padding:40px 20px;box-sizing:border-box;">
+    <div style="max-width:400px;margin:100px auto 0 auto;">
+      <div id="wechat-guide-title" style="font-size:22px;font-weight:bold;margin-bottom:20px;">Please open in your browser</div>
+      <div id="wechat-guide-instructions" style="font-size:16px;line-height:1.6;">Please click on the upper right corner <b>…</b> button<br>select <b>Open in Browser</b> to download and install the app properly.</div>
+      <div id="wechat-guide-support" style="margin-top:30px;font-size:13px;opacity:0.7;">If you need help, please contact technical support</div>
+    </div>
+  </div>
+
   <script>
+    // 语言翻译
+    const translations = {
+      en: {
+        title: 'App Download',
+        downloadBtn: 'Download for Android',
+        iosNotSupported: 'Not currently supported on iOS',
+        deviceNotSupported: 'This device is not currently supported',
+        wechatGuideTitle: 'Please open in your browser',
+        wechatGuideInstructions: 'Please click on the upper right corner <b>…</b> button<br>select <b>Open in Browser</b> to download and install the app properly.',
+        wechatGuideSupport: 'If you need help, please contact technical support'
+      },
+      zh: {
+        title: 'App 下载',
+        downloadBtn: '安卓版下载',
+        iosNotSupported: '暂不支持 iOS 设备',
+        deviceNotSupported: '暂不支持该设备',
+        wechatGuideTitle: '请在浏览器中打开',
+        wechatGuideInstructions: '请点击右上角 <b>…</b> 按钮<br>选择 <b>在浏览器中打开</b>，以便正常下载和安装应用。',
+        wechatGuideSupport: '如需帮助，请联系技术支持'
+      }
+    };
+
+    // 获取当前语言
+    function getLanguage() {
+      const lang = navigator.language || navigator.userLanguage;
+      return lang.startsWith('zh') ? 'zh' : 'en';
+    }
+
+    // 设置页面语言
+    function setLanguage(lang) {
+        const t = translations[lang];
+        document.title = t.title;
+        document.getElementById('download-btn').textContent = t.downloadBtn;
+        document.getElementById('wechat-guide-title').innerHTML = t.wechatGuideTitle;
+        document.getElementById('wechat-guide-instructions').innerHTML = t.wechatGuideInstructions;
+        document.getElementById('wechat-guide-support').innerHTML = t.wechatGuideSupport;
+    }
+
+    const currentLang = getLanguage();
+
+    // 检测是否为微信内置浏览器
+    function isWeChatBrowser() {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.indexOf('micromessenger') !== -1;
+    }
+
+    // 显示微信引导遮罩层
+    function showWeChatGuide() {
+      document.getElementById('wechat-guide').style.display = 'block';
+      document.body.style.overflow = 'hidden'; // 防止页面滚动
+    }
+
     // 检测设备类型
     function detectDevice() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -103,16 +164,25 @@
       event.preventDefault(); // 阻止默认行为
 
       const device = detectDevice();
+      const t = translations[currentLang];
 
       if (device === "ios") {
         // 如果是 iOS，显示 Toast 提示
-        showToast("Not currently supported on iOS");
+        showToast(t.iosNotSupported);
       } else if (device === "android") {
         // 如果是 Android，跳转到下载链接
         window.location.href = "https://pub-da2c57f883a546c7b8b565a4d6d600d5.r2.dev/Lume.apk"; // 替换为实际 APK 链接
       } else {
         // 如果是未知设备，显示提示
-        showToast("This device is not currently supported");
+        showToast(t.deviceNotSupported);
+      }
+    });
+
+    // 页面加载时执行
+    window.addEventListener('DOMContentLoaded', function() {
+      setLanguage(currentLang);
+      if (isWeChatBrowser()) {
+        showWeChatGuide();
       }
     });
   </script>
