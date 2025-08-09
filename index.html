@@ -170,8 +170,17 @@
         // 如果是 iOS，显示 Toast 提示
         showToast(t.iosNotSupported);
       } else if (device === "android") {
-        // 如果是 Android，跳转到下载链接
-        window.location.href = "https://pub-da2c57f883a546c7b8b565a4d6d600d5.r2.dev/Lume.apk"; // 替换为实际 APK 链接
+        // 如果是 Android，根据地区跳转不同链接
+        fetch('https://ipinfo.io/json')
+          .then(res => res.json())
+          .then(data => {
+            if (data.country === 'CN') {
+              window.location.href = 'https://usblighterfactory.com.cn/Lume.apk'; // 腾讯云CDN
+            } else {
+              window.location.href = 'https://apk.usblighterfactory.com/Lume.apk'; // R2
+             //  https://pub-da2c57f883a546c7b8b565a4d6d600d5.r2.dev/Lume.apk
+            }
+          });
       } else {
         // 如果是未知设备，显示提示
         showToast(t.deviceNotSupported);
